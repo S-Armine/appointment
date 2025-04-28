@@ -1,5 +1,6 @@
 package com.qless.appointment.controller;
 
+import com.qless.appointment.exception.CSVFormatException;
 import com.qless.appointment.service.AppointmentService;
 import com.qless.appointment.util.FileUtil;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +24,15 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<Void> importAppointments(
-            @RequestPart("file") MultipartFile file) throws IOException {
+            @RequestPart("file") MultipartFile file) throws IOException, CSVFormatException {
         if (!(file != null
                 && Objects.requireNonNull(file.getContentType()).equalsIgnoreCase("text/csv")
                 && FileUtil.checkHeader(file))) {
-            return ResponseEntity.badRequest().build();
+            throw new CSVFormatException("Format of file is not supported.");
         }
         FileUtil.saveFile(file);
         appointmentService.processAppointmentFile(file);
         return ResponseEntity.ok().build();
-    }
-
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<Void> handleIOException(IOException e) {
-        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/status/{filename}")

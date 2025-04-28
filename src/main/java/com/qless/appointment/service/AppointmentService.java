@@ -47,7 +47,7 @@ public class AppointmentService {
     public void processData(AppointmentDTO appointmentDTO, String fileName) {
         LocalDateTime appointmentTime = appointmentDTO.getAppointmentTime();
         int durationMinutes = 15;
-        if (appointmentSuccessRepository.findByDateBetween(appointmentTime.minusMinutes(durationMinutes), appointmentTime.plusMinutes(15)).isEmpty()) {
+        if (appointmentSuccessRepository.findByDateBetween(appointmentTime.minusMinutes(durationMinutes), appointmentTime).isEmpty()) {
             var foundAppointmentOptional = appointmentSuccessRepository.findByExternalId(appointmentDTO.getExternalId());
             if (foundAppointmentOptional.isPresent()) {
                 var appointment = foundAppointmentOptional.get();
