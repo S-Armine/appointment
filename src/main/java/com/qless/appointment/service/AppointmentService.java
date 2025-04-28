@@ -7,6 +7,7 @@ import com.qless.appointment.domain.Appointment;
 import com.qless.appointment.domain.AppointmentFailure;
 import com.qless.appointment.domain.AppointmentSuccess;
 import com.qless.appointment.dto.AppointmentDTO;
+import com.qless.appointment.dto.StatusDTO;
 import com.qless.appointment.repository.AppointmentFailureRepository;
 import com.qless.appointment.repository.AppointmentSuccessRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -91,13 +92,13 @@ public class AppointmentService {
         }
     }
 
-    public Map<String, List<Long>> getStatuses(String fileName) {
+    public StatusDTO getStatuses(String fileName) {
         var failed = appointmentFailureRepository.findByFilename(fileName).stream().map(AppointmentFailure::getExternalId).toList();
         var succeeded = appointmentSuccessRepository.findByFilename(fileName).stream().map(AppointmentSuccess::getExternalId).toList();
 
-        Map<String, List<Long>> statuses = new HashMap<>();
-        statuses.put("SUCCESS", succeeded);
-        statuses.put("FAILED", failed);
-        return statuses;
+        StatusDTO statusDto = new StatusDTO();
+        statusDto.setSuccess(succeeded);
+        statusDto.setFailed(failed);
+        return statusDto;
     }
 }

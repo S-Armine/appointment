@@ -1,5 +1,6 @@
 package com.qless.appointment.controller;
 
+import com.qless.appointment.dto.StatusDTO;
 import com.qless.appointment.exception.CSVFormatException;
 import com.qless.appointment.service.AppointmentService;
 import com.qless.appointment.util.FileUtil;
@@ -36,7 +37,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/status/{filename}")
-    public ResponseEntity<Map<String, List<Long>>> getFileStatus(@PathVariable String filename) {
+    public ResponseEntity<StatusDTO> getFileStatus(@PathVariable String filename) {
         var statuses = appointmentService.getStatuses(filename);
         return ResponseEntity.ok().body(statuses);
     }
